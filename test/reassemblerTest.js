@@ -15,11 +15,11 @@ module.exports = {
 
     reassembler.on('tcpStream', function(tcpStream) {
       if (tcpStream.sourceIP === a && tcpStream.destinationIP === b) {
-          tcpStream.on('dataAtoB', function(message) {
-          arrayAtoB.push(message.data.toString());           
+        tcpStream.on('dataAtoB', function(message) {
+          arrayAtoB.push(message.data.toString());
         });
         tcpStream.on('dataBtoA', function(message) {
-          arrayBtoA.push(message.data.toString());  
+          arrayBtoA.push(message.data.toString());
         });
         tcpStream.on('end', function() {
           test.equal(arrayAtoB.length, 5);
@@ -37,10 +37,10 @@ module.exports = {
         });
       } else if (tcpStream.sourceIP === b && tcpStream.destinationIP === c) {
         tcpStream.on('dataAtoB', function(message) {
-          arrayBtoC.push(message.data.toString());           
+          arrayBtoC.push(message.data.toString());
         });
         tcpStream.on('dataBtoA', function(message) {
-          arrayCtoB.push(message.data.toString());  
+          arrayCtoB.push(message.data.toString());
         });
       } else {
         test.fail("Invalid handling of tcpStreams");
@@ -53,7 +53,11 @@ module.exports = {
         sourcePort: 3372,
         destPort: 80,
         seq: 951057939,
-        data: new Buffer(0)
+        data: new Buffer(0),
+        isFIN: false,
+        isACK: false,
+        isPSH: false,
+        isSYN: true
       }
     });
 
@@ -64,7 +68,11 @@ module.exports = {
         destPort: 3372,
         seq: 290218379,
         ack: 951057940,
-        data: new Buffer(0)
+        data: new Buffer(0),
+        isFIN: false,
+        isACK: true,
+        isPSH: false,
+        isSYN: true
       }
     });
 
@@ -89,7 +97,6 @@ module.exports = {
       }
     });
 
-    
 
     reassembler.push({
       ip: { source: '145.254.160.237', dest: '65.208.228.223' },
@@ -98,7 +105,11 @@ module.exports = {
         destPort: 80,
         seq: 951057940,
         ack: 290218380,
-        data: new Buffer(0)
+        data: new Buffer(0),
+        isFIN: false,
+        isACK: true,
+        isPSH: false,
+        isSYN: false
       }
     });
 
@@ -109,7 +120,11 @@ module.exports = {
         destPort: 80,
         seq: 951057940,
         ack: 290218380,
-        data: new Buffer('hostA to hostB (1)')
+        data: new Buffer('hostA to hostB (1)'),
+        isFIN: false,
+        isACK: true,
+        isPSH: true,
+        isSYN: false
       }
     });
 
@@ -120,7 +135,11 @@ module.exports = {
         destPort: 3372,
         seq: 290218380,
         ack: 951058419,
-        data: new Buffer(0)
+        data: new Buffer(0),
+        isFIN: false,
+        isACK: true,
+        isPSH: false,
+        isSYN: false
       }
     });
 
@@ -131,7 +150,11 @@ module.exports = {
         destPort: 3372,
         seq: 290218380,
         ack: 951058419,
-        data: new Buffer('hostB to hostA (1)')
+        data: new Buffer('hostB to hostA (1)'),
+        isFIN: false,
+        isACK: true,
+        isPSH: false,
+        isSYN: false
       }
     });
 
@@ -142,7 +165,11 @@ module.exports = {
         destPort: 80,
         seq: 951058419,
         ack: 290219760,
-        data: new Buffer(0)
+        data: new Buffer(0),
+        isFIN: false,
+        isACK: true,
+        isPSH: false,
+        isSYN: false
       }
     });
 
@@ -153,7 +180,11 @@ module.exports = {
         destPort: 3372,
         seq: 290219760,
         ack: 951058419,
-        data: new Buffer('hostB to hostA (2)')
+        data: new Buffer('hostB to hostA (2)'),
+        isFIN: false,
+        isACK: true,
+        isPSH: false,
+        isSYN: false
       }
     });
 
@@ -164,7 +195,11 @@ module.exports = {
         destPort: 80,
         seq: 951058419,
         ack: 290221140,
-        data: new Buffer(0)
+        data: new Buffer(0),
+        isFIN: false,
+        isACK: true,
+        isPSH: false,
+        isSYN: false
       }
     });
 
