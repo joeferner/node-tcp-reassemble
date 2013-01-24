@@ -24,8 +24,8 @@ module.exports = {
         tcpStream.on('end', function() {
           test.equal(arrayAtoB.length, 5);
           test.equal(arrayBtoA.length, 4);
-          test.equal(arrayBtoC.length, 1);
-          test.equal(arrayCtoB.length, 1);
+          test.equal(arrayBtoC.length, 3);
+          test.equal(arrayCtoB.length, 2);
           test.notEqual(arrayAtoB.indexOf('hostA to hostB (1)'), -1);
           test.equal(arrayAtoB.indexOf('hostA to hostB (2)'), -1);
           test.equal(arrayBtoA.indexOf('hostA to hostB (1)'), -1);
@@ -79,11 +79,59 @@ module.exports = {
     reassembler.push({
       ip: { source: '65.208.228.223', dest: '65.206.233.233' },
       tcp: {
+        sourcePort: 3372,
+        destPort: 80,
+        seq: 123456789,
+        data: new Buffer(0),
+        isFIN: false,
+        isACK: false,
+        isPSH: false,
+        isSYN: false
+      }
+    });
+
+    reassembler.push({
+      ip: { source: '65.206.233.233', dest: '65.208.228.223' },
+      tcp: {
         sourcePort: 80,
         destPort: 3372,
-        seq: 290218379,
-        ack: 951057940,
-        data: new Buffer('hostB to hostC (1)')
+        seq: 100000000,
+        ack: 123456790,
+        data: new Buffer(0),
+        isFIN: false,
+        isACK: true,
+        isPSH: false,
+        isSYN: false
+      }
+    });
+
+    reassembler.push({
+      ip: { source: '65.208.228.223', dest: '65.206.233.233' },
+      tcp: {
+        sourcePort: 3372,
+        destPort: 80,
+        seq: 123456790,
+        ack: 100000001,
+        data: new Buffer(0),
+        isFIN: false,
+        isACK: true,
+        isPSH: false,
+        isSYN: false
+      }
+    });
+
+    reassembler.push({
+      ip: { source: '65.208.228.223', dest: '65.206.233.233' },
+      tcp: {
+        sourcePort: 80,
+        destPort: 3372,
+        seq: 123456790,
+        ack: 100000001,
+        data: new Buffer('hostB to hostC (1)'),
+        isFIN: false,
+        isACK: true,
+        isPSH: true,
+        isSYN: false
       }
     });
 
@@ -93,7 +141,11 @@ module.exports = {
         sourcePort: 3372,
         destPort: 80,
         seq: 951057939,
-        data: new Buffer('hostC to hostB (1)')
+        data: new Buffer('hostC to hostB (1)'),
+        isFIN: false,
+        isACK: true,
+        isPSH: false,
+        isSYN: false
       }
     });
 
@@ -210,8 +262,11 @@ module.exports = {
         destPort: 80,
         seq: 951058419,
         ack: 290221140,
-        fin: true,
-        data: new Buffer(0)
+        data: new Buffer(0),
+        isFIN: true,
+        isACK: true,
+        isPSH: false,
+        isSYN: false
       }
     });
   }
