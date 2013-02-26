@@ -15,5 +15,8 @@
   "license": "MIT",
   "devDependencies": {
     "nodeunit": "~0.7.4"
+  },
+  "dependencies": {
+    "async": "~0.2.5"
   }
 }
